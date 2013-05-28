@@ -1,0 +1,30 @@
+import java.io.File;
+
+
+public class RDParserTester {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		File input = new File(args[0]);
+		
+		Parser.analyze(input, "8061-2", 5);
+		
+		/*for (double[] d: temp){
+			for (double dd: d){
+				System.out.println(dd + " ");
+			}
+			
+			System.out.println("\n");
+		}*/
+		
+		/*for (int i = 0; i < 4; i++){
+			for (int j = 0; j < 11; j++){
+				System.out.println(temp[i][j]);
+			}
+			System.out.println("\n");
+		}*/
+	}
+
+}

@@ -1,0 +1,12 @@
+
+public class Unit {
+	
+	private int SN;
+	private double[][] readings;
+	
+	
+	public Unit(int SN, double[][] readings){
+		this.SN = SN;
+		this.readings = readings;
+	}
+}

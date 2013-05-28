@@ -1,0 +1,23 @@
+import java.io.File;
+
+
+public class RDParserTester {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		File input = new File(args[0]);
+		
+		double[][] temp = Parser.analyze(input);
+		
+		for (double[] d: temp){
+			for (double dd: d){
+				System.out.println(dd + " ");
+			}
+			
+			System.out.println("\n");
+		}
+	}
+
+}

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "db.units.find().pretty()" | mongo oilFluidExp
