@@ -15,6 +15,7 @@ public class Parser {
 		int SN = 0;
 
 		double[][] outputReadings = null;
+		double[][] resistances = null;
 
 		try {
 			input = new Scanner(inFile);
@@ -58,44 +59,73 @@ public class Parser {
 				}
 			} // should be on resistance values
 
-			// read until zero
-			while (!input.hasNext("\\s*0\\s*")) {
-				input.next();
-			}
-
-			input.next(); // eat that zero
-
 			outputReadings = new double[4][11];
-			for (int i = 0; i < 4; i++) {
+			resistances = new double[2][4];
+			
+			//get input, then output resistance values
+			resistances[0][0] = Double.parseDouble(input.next().trim());
+			resistances[1][0] = Double.parseDouble(input.next().trim());
+			
+			for (int i = 0; i < 3; i++) {				
+				// read until zero
+				while (!input.hasNext("\\s*0\\s*")) {
+					input.next();
+				}
+
+				//input.next(); // eat that zero
+				
+				//go until non-zero
+				while (input.hasNext("\\s*0\\s*")){
+					input.next();
+				}
+				
+				
 				double reading = Double.parseDouble(input.next().trim());
 				int j = 0;
 
 				while (reading < 1000) { // continue up until resistance
 											// measurements (which should be
 											// >1000)
-
+					
 					outputReadings[i][j] = reading;
 					reading = Double.parseDouble(input.next().trim());
-					j++;
-					
-					if (i == 3 && j == 1){
-						break;
-					}
+					j++;	
 				}
-
-				// read until zero
-				while (!input.hasNext("\\s*0\\s*")) {
-					input.next();
-				}
-
-				input.next(); // eat that zero
-				// read until not zero
-				while (input.hasNext("\\s*0\\s*")) {
-					input.next();
-				} // now on next non-resistor, non-zero value
+				
+				resistances[0][i + 1] = reading;
+				resistances[1][i + 1] = Double.parseDouble(input.next().trim());
 			}
 			
-			units.add(new Unit(SN, outputReadings));
+			//get second RT measurement--formatted differently (w.r.t to 0s)
+			
+			// read until zero
+			while (!input.hasNext("\\s*0\\s*")) {
+				input.next();
+			}
+
+			input.next(); // eat that zero
+			// read until not zero
+			while (input.hasNext("\\s*0\\s*")) {
+				input.next();
+			} // now on next non-resistor, non-zero value
+			
+			//get 0psi
+			outputReadings[3][0] = Double.parseDouble(input.next().trim());
+			
+			while (input.hasNext("\\s*0\\s*")){
+				input.next();
+			}
+			
+			//get max psi
+			outputReadings[3][1] = Double.parseDouble(input.next().trim());
+			
+			while (input.hasNext("\\s*0\\s*")){
+				input.next();
+			}
+			//get 0psi
+			outputReadings[3][2] = Double.parseDouble(input.next().trim());
+			
+			units.add(new Unit(SN, outputReadings, resistances));
 		}
 		
 		return units;
