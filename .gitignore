@@ -1,1 +1,12 @@
+# Eclipse metadata
 .metadata/
+
+# unitsToAdd data will be generated on each call of ./addUnits
+unitsToAdd.js
+
+# C intermediate files
+*.o
+
+# raw data files
+*.RD
+*.RD-unix

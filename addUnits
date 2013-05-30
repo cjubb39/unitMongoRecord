@@ -1,9 +1,25 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-	echo "Please use two arguments.  ./addUnits <FLUID> <GROUP>"
+if [ $# -ne 5 ]; then
+	echo "Please use 5 arguments: ./addUnits <rawDataFile> <lotIndicator> <numberOfUnitsToRead> <fluid> <group>"
 	exit
 fi
 
-./enterUnits $1 $2
-mongo < unitsToAdd.js
+#makes sure line breaks are appropriate
+echo "Ensuring file has correct line endings by creating temp file and converting"
+TMPRD=$HOME/$1-unix
+cp $1 $TMPRD 
+dos2unix $TMPRD > /dev/null
+
+#sets classpath for java to include .class files in different folder
+#and use external jar
+CLASSPATH=./rawDataParser/commons-math3-3.2.jar:./rawDataParser
+
+echo "Parsing raw data file and creating instructions for mongo shell"
+java -cp $CLASSPATH RDParserTester $TMPRD $2 $3 | ./enterUnits $4 $5 > /dev/null
+
+echo "Adding units to mongodb"
+cat unitsToAdd.js | mongo > /dev/null
+
+echo "Removing temp file created earlier"
+rm $TMPRD

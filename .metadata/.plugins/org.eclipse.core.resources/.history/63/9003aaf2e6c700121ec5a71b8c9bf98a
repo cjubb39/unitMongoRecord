@@ -1,7 +1,0 @@
-
-public class Unit {
-
-	public Unit(int SN, double[][] readings){
-		
-	}
-}

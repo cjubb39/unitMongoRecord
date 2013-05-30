@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 
 		group = argv[2];
 		printf("GROUP: %s\n", group);
-		
+
 		printf("Enter number of units\n");
 		scanf("%d", &numUnits);
 	} else {
