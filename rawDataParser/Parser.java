@@ -30,6 +30,7 @@ public class Parser {
 		Scanner input = null;
 		ArrayList<Unit> units = new ArrayList<Unit>();
 		int SN = 0;
+		String fullSN = null;
 
 		double[][] outputReadings = null;
 		double[][] resistances = null;
@@ -42,6 +43,7 @@ public class Parser {
 
 		// Set-up scanner preferences
 		input.useDelimiter(System.getProperty("line.separator"));
+		input.useDelimiter("\n");
 
 		// repeat for numUnits
 		for (int counter = 0; counter < numUnits; counter++) {
@@ -55,6 +57,7 @@ public class Parser {
 					.matcher(input.next());
 			if (snMatcher.find()) {
 				SN = Integer.parseInt(snMatcher.group(1));
+				fullSN = snMatcher.group(0).trim();
 			}
 
 			// look for single 0
@@ -65,13 +68,13 @@ public class Parser {
 				}
 
 				// make sure more zeros do not follow
-				input.next(); // eats first zero
+				input.next();
 
 				if (!input.hasNext("\\s*0\\s*")) {
 					indicator = true;
 				}
 			} // input.next() called now should return resistance values
-
+		
 			outputReadings = new double[4][11];
 			resistances = new double[2][4];
 
@@ -99,7 +102,7 @@ public class Parser {
 				double reading = Double.parseDouble(input.next().trim());
 				int j = 0;
 
-				while (reading < 1000) { // continue up until resistance
+				while (reading < 500) { // continue up until resistance
 											// measurements (which should be
 											// >1000)
 
@@ -143,7 +146,7 @@ public class Parser {
 			// get 0psi
 			outputReadings[3][2] = Double.parseDouble(input.next().trim());
 
-			units.add(new Unit(SN, outputReadings, resistances));
+			units.add(new Unit(SN, fullSN, outputReadings, resistances));
 		}
 
 		return units;
@@ -162,6 +165,7 @@ public class Parser {
 		for (Unit u : units) {
 			// info for each unit
 			System.out.println(u.getSN());
+			System.out.println(u.getFullSN());
 			System.out.println(u.getChTCR());
 			System.out.println(u.getCrTCR());
 			System.out.println(u.getRhTCR());

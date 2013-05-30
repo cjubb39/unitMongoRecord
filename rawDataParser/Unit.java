@@ -8,9 +8,10 @@ public class Unit {
 	private static final int PRESSURE_STEP = 5;
 
 	private int SN;
+	private String fullSN;
 	private double[][] readings;
 	private double[] inputR;
-	//private double[] outputR; //capacity to use outputR in future
+	// private double[] outputR; //capacity to use outputR in future
 	private double FS;
 	private double chTCR, crTCR, rhTCR;
 	private double chNull, crNull, rhNull;
@@ -31,11 +32,12 @@ public class Unit {
 	 *            the input resistance at the jth temperature; resistance[1][j]
 	 *            corresponds to the output resistance at the jth temperature
 	 */
-	public Unit(int SN, double[][] readings, double[][] resistance) {
+	public Unit(int SN, String fullSN, double[][] readings, double[][] resistance) {
 		this.SN = SN;
+		this.fullSN = fullSN;
 		this.readings = readings;
 		this.inputR = resistance[0];
-		//this.outputR = resistance[1];
+		// this.outputR = resistance[1];
 
 		this.initialize();
 	}
@@ -186,6 +188,15 @@ public class Unit {
 	 */
 	public int getSN() {
 		return this.SN;
+	}
+
+	/**
+	 * Getter for full Serial Number (including lot indicator)
+	 * 
+	 * @return Full serial number of unit
+	 */
+	public String getFullSN() {
+		return this.fullSN;
 	}
 
 	/**

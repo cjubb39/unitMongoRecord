@@ -8,8 +8,11 @@ fi
 #makes sure line breaks are appropriate
 echo "Ensuring file has correct line endings by creating temp file and converting"
 TMPRD=$HOME/$1-unix
-cp $1 $TMPRD 
-dos2unix $TMPRD > /dev/null
+cp $1 $TMPRD
+
+#covnert to correct line endings
+sed -i 's/\r\n/\n/g' $TMPRD
+sed -i 's/\r/\n/g' $TMPRD
 
 #sets classpath for java to include .class files in different folder
 #and use external jar

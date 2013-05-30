@@ -29,9 +29,13 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	float chNull, crNull, rhNull;
 	float lin, hyst, nullSet, nfsoSet;
 	int SN;
+	char fullSN[30];
 
 	printf("Enter Serial Number: ");
 	scanf("%d", &SN);
+
+	printf("Enter full Serial Number (including lotIndicator)");
+	scanf("%s", fullSN);
 
 	//TCR
 	printf("Enter Cold-Hot TCR: ");
@@ -77,7 +81,7 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	}
 
 	//begin writing to js file
-	fprintf(file, "db.units.save({_id: %d, Fluid: \"%s\", Group: \"%s\", chTCR: %2.3f, crTCR: %2.3f, rhTCR: %2.3f, chNull: %2.3f, crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, nfsoSet: %2.3f})\n", SN, fluid, group, chTCR, crTCR, rhTCR, chNull, crNull, rhNull, lin, hyst, nullSet, nfsoSet);
+	fprintf(file, "db.units.save({_id: %d, fullSN: \"%s\", Fluid: \"%s\", Group: \"%s\", chTCR: %2.3f, crTCR: %2.3f, rhTCR: %2.3f, chNull: %2.3f, crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, nfsoSet: %2.3f})\n", SN, fullSN, fluid, group, chTCR, crTCR, rhTCR, chNull, crNull, rhNull, lin, hyst, nullSet, nfsoSet);
 
 	fflush(file);
 

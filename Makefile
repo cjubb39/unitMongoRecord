@@ -27,4 +27,4 @@ clean:
 	rm -f *.o
 
 .PHONY: all
-all: clean main
+all: clean enterUnits clean

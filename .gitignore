@@ -9,4 +9,8 @@ unitsToAdd.js
 
 # raw data files
 *.RD
-*.RD-unix
+*.RD-*
+
+# raw data folders
+temp/
+temp2/
