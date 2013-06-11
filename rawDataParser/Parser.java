@@ -104,8 +104,7 @@ public class Parser {
 
 				while (reading < 500) { // continue up until resistance
 											// measurements (which should be
-											// >1000)
-
+											// >5000)
 					outputReadings[i][j] = reading;
 					reading = Double.parseDouble(input.next().trim());
 					j++;

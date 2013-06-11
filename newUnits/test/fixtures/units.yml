@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  Fluid: MyString
+  Group: MyString
+  SN: 1
+  chNull: 1.5
+  chTCR: 1.5
+  crNull: 1.5
+  crTCR: 1.5
+  fullSN: MyString
+  hyst: 1.5
+  lin: 1.5
+  nfsoSet: 1.5
+  nullSet: 1.5
+  rhNull: 1.5
+  rhTCR: 1.5
+
+two:
+  Fluid: MyString
+  Group: MyString
+  SN: 1
+  chNull: 1.5
+  chTCR: 1.5
+  crNull: 1.5
+  crTCR: 1.5
+  fullSN: MyString
+  hyst: 1.5
+  lin: 1.5
+  nfsoSet: 1.5
+  nullSet: 1.5
+  rhNull: 1.5
+  rhTCR: 1.5

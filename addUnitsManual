@@ -6,4 +6,6 @@ if [ $# -ne 2 ]; then
 fi
 
 ./enterUnits $1 $2
-mongo < unitsToAdd.js
+
+echo "Adding units to mongodb"
+cat unitsToAdd.js | mongo > /dev/null

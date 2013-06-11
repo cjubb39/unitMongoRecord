@@ -1,5 +1,7 @@
 # Eclipse metadata
-.metadata/
+/.metadata
+rawDataParser/.metadata/
+rawDataParser/.settings/
 
 # unitsToAdd data will be generated on each call of ./addUnits
 unitsToAdd.js
@@ -12,5 +14,13 @@ unitsToAdd.js
 *.RD-*
 
 # raw data folders
-temp/
-temp2/
+unitsToAdd/
+
+#Custom config files and backups
+exportFields
+toReset
+masterRecord.js
+masterTestRecord.js
+
+testerBackup.*
+unitsBackup.*

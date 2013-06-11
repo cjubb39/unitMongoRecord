@@ -167,8 +167,7 @@ public class Unit {
 		double firstNFSO, secondNFSO;
 		firstNFSO = this.readings[0][(int) Math
 				.floor(this.readings[0].length / 2)] - this.readings[0][0];
-		secondNFSO = this.readings[3][(int) Math
-				.floor(this.readings[0].length / 2)] - this.readings[3][0];
+		secondNFSO = this.readings[3][1] - this.readings[3][0];
 		this.nfsoSet = secondNFSO - firstNFSO;
 	}
 

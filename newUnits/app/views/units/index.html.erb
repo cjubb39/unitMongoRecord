@@ -1,0 +1,60 @@
+<h1>Listing Units</h1>
+
+<%= form_tag units_path, :method => 'get' do %>
+  <%= hidden_field_tag :direction, params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+  <p><a href="/units">Reset Search</a></p>
+<% end %>
+<% sort_direction; sort_column %>
+<table class="pretty">
+  <tr>
+    <th><%= sortable "SN" %> </th>
+    <th><%= sortable "fullSN" %> </th>
+    <th><%= sortable "Fluid" %> </th>
+    <th><%= sortable "Group" %> </th>
+    <th><%= sortable "chNull" %> </th>
+    <th><%= sortable "chTCR" %> </th>
+    <th><%= sortable "crNull" %> </th>
+    <th><%= sortable "crTCR" %> </th>
+    <th><%= sortable "rhNull" %> </th>
+    <th><%= sortable "rhTCR" %> </th>
+    <th><%= sortable "hyst" %> </th>
+    <th><%= sortable "lin" %> </th>
+    <th><%= sortable "nfsoSet" %> </th>
+    <th><%= sortable "nullSet" %> </th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @units.each do |unit| %>
+  <tr>
+    <td><%= unit.SN %></td>
+    <td><%= unit.fullSN %></td>
+    <td><%= unit.Fluid %></td>
+    <td><%= unit.Group %></td>
+    <td><%= unit.chNull %></td>
+    <td><%= unit.chTCR %></td>
+    <td><%= unit.crNull %></td>
+    <td><%= unit.crTCR %></td>
+    <td><%= unit.rhNull %></td>
+    <td><%= unit.rhTCR %></td>
+    <td><%= unit.hyst %></td>
+    <td><%= unit.lin %></td>
+    <td><%= unit.nfsoSet %></td>
+    <td><%= unit.nullSet %></td>
+    <td><%= link_to 'Show', unit %></td>
+    <td><%= link_to 'Edit', edit_unit_path(unit) %></td>
+    <td><%= link_to 'Destroy', unit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+<%= will_paginate @units %>
+
+<br />
+
+<%= link_to 'New Unit', new_unit_path %>
