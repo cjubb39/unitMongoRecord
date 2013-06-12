@@ -1,11 +1,44 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-	echo "Please use two arguments: ./addUnitsManual <FLUID> <GROUP>"
+#check correct number of arguments
+if [ $# -ne 3 ]; then
+	echo "Please use 3 arguments: ./addUnits <fluid> <group> <liveWrite?>"
 	exit
 fi
 
-./enterUnits $1 $2
+#set variables
+TESTER_COLLECTION=tester
+PRODUCTION_COLLECTION=units
+EXPORT_FIELD_FILE=exportFields
 
-echo "Adding units to mongodb"
+#set current collection
+if [ $3 -ne 1 ]; then
+	CURRENT_COLLECTION=$TESTER_COLLECTION
+else
+	CURRENT_COLLECTION=$PRODUCTION_COLLECTION
+fi
+
+./enterUnits $1 $2 
+
+# Change mongodb collection (if necessary) and add mongo commands to backups
+echo "Units will be added to $CURRENT_COLLECTION collection"
+if [ $3 -ne 1 ]; then
+	sed -i 's/db.$PRODUCTION_COLLECTION./db.$TESTER_COLLECTION./g' unitsToAdd.js
+
+	#add to backup record
+	cat unitsToAdd.js >> masterTestRecord.js
+else
+	cat unitsToAdd.js >> masterRecord.js
+fi
+
+# Add units to database
+echo "Adding units to mongodb" 
 cat unitsToAdd.js | mongo > /dev/null
+
+#create backups of database
+BACKUP_NAME="$CURRENT_COLLECTION"
+BACKUP_NAME+="Backup_"
+BACKUP_NAME+="$(date +%F)"
+
+mongoexport --db oilFluidExp --collection $CURRENT_COLLECTION --csv --fieldFile $EXPORT_FIELD_FILE --out ./$BACKUP_NAME.csv
+mongoexport --db oilFluidExp --collection $CURRENT_COLLECTION --out ./$BACKUP_NAME.json

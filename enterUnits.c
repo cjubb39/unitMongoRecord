@@ -3,12 +3,14 @@
 
 #define BAD_ARGUMENTS 1;
 #define FILE_PROBLEM 2;
+
 int main(int argc, char **argv)
 {
 	int numUnits;
 	const char *fluid;
 	const char *group;
 
+	// make sure arguments correct
 	if (argc == 3) {
 		fluid = argv[1];
 		printf("FLUID: %s\n", fluid);

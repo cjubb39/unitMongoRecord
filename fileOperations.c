@@ -2,20 +2,23 @@
 #include "fileOperations.h"
 
 FILE * initializeFile(FILE *file){
+	// create file
 	file = fopen("unitsToAdd.js", "w+");
 
+	// make sure file created properly
 	if (!file){
 		printf("Failed to open file");
 		return 0;
 	}
 
+	// header for file
 	fprintf(file, "use oilFluidExp\n");
-
 
 	return file;
 }
 
 int closeFile(FILE *file){
+	// close file.  Return error if necesssary
 	if (fclose(file)){
 		printf("Error closing file");
 		return 1;
@@ -34,10 +37,10 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	printf("Enter Serial Number: ");
 	scanf("%d", &SN);
 
-	printf("Enter full Serial Number (including lotIndicator)");
+	printf("Enter full Serial Number (including Lot Indicator)");
 	scanf("%s", fullSN);
 
-	//TCR
+	// TCR
 	printf("Enter Cold-Hot TCR: ");
 	scanf("%f", &chTCR);
 
@@ -48,7 +51,7 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	scanf("%f", &rhTCR);
 
 
-	//Null Shifts
+	// Null Shifts
 	printf("Enter Cold-Hot Null Shift: ");
 	scanf("%f", &chNull);
 
@@ -58,7 +61,7 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	printf("Enter Room-Hot Null Shift: ");
 	scanf("%f", &rhNull);
 
-	//Misc Data
+	// Misc Data
 	printf("Enter Linearity: ");
 	scanf("%f", &lin);
 
@@ -71,19 +74,17 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	printf("Enter NSFO Set: ");
 	scanf("%f", &nfsoSet);
 
-	//check 
+	// confirm
 	int indicator;
 	printf("Correct? Enter 1 for yes ");
 	scanf("%d", &indicator);
 
 	if (indicator != 1){
-		return 1;
+		return 42;
 	}
 
-	//begin writing to js file
+	// begin mongodb command to add unit to database
 	fprintf(file, "db.units.update({SN: %d, Group: \"%s\"}, {$set: {SN: %d, fullSN: \"%s\", Fluid: \"%s\", Group: \"%s\", chTCR: %2.3f, crTCR: %2.3f, rhTCR: %2.3f, chNull: %2.3f, crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, nfsoSet: %2.3f}}, true)\n", SN, group, SN, fullSN, fluid, group, chTCR, crTCR, rhTCR, chNull, crNull, rhNull, lin, hyst, nullSet, nfsoSet);
-
-
 	fflush(file);
 
 	return 0;

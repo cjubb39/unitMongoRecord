@@ -1,10 +1,25 @@
 #!/bin/bash
-TESTER_COLLECTION=tester
+#STILL NEED TO ADD AUTOMATIC LINE ENDING CONVERSION
 
-
+#check correct number of arguments
 if [ $# -ne 6 ]; then
 	echo "Please use 6 arguments: ./addUnits <rawDataFile> <lotIndicator> <numberOfUnitsToRead> <fluid> <group> <liveWrite?>"
 	exit
+fi
+
+#set variables
+TESTER_COLLECTION=tester
+PRODUCTION_COLLECTION=units
+EXPORT_FIELD_FILE=exportFields
+
+#sets classpath for java to include .class files in different folder and use external jar
+JAVA_CLASSPATH=./rawDataParser/commons-math3-3.2.jar:./rawDataParser
+
+#set current collection
+if [ $6 -ne 1 ]; then
+	CURRENT_COLLECTION=$TESTER_COLLECTION
+else
+	CURRENT_COLLECTION=$PRODUCTION_COLLECTION
 fi
 
 # #makes sure line breaks are appropriate
@@ -16,16 +31,14 @@ fi
 # sed -i 's/\r\n/\n/g' $TMPRD
 # sed -i 's/\r/\n/g' $TMPRD
 
-#sets classpath for java to include .class files in different folder
-#and use external jar
-CLASSPATH=./rawDataParser/commons-math3-3.2.jar:./rawDataParser
-
+# Read in and parse raw data files.  Convert to mongodb commands
 echo "Parsing raw data file and creating instructions for mongo shell"
-java -cp $CLASSPATH RDParserTester $1 $2 $3 | ./enterUnits $4 $5 > /dev/null
+java -cp $JAVA_CLASSPATH RDParserTester $1 $2 $3 | ./enterUnits $4 $5 > /dev/null
 
+# Change mongodb collection (if necessary) and add mongo commands to backups
+echo "Units will be added to $CURRENT_COLLECTION collection"
 if [ $6 -ne 1 ]; then
-	echo "Units will be saved to $TESTER_COLLECTION collection"
-	sed -i 's/db.units./db.$TESTER_COLLECTION./g' unitsToAdd.js
+	sed -i 's/db.$PRODUCTION_COLLECTION./db.$TESTER_COLLECTION./g' unitsToAdd.js
 
 	#add to backup record
 	cat unitsToAdd.js >> masterTestRecord.js
@@ -33,25 +46,16 @@ else
 	cat unitsToAdd.js >> masterRecord.js
 fi
 
+# Add units to database
 echo "Adding units to mongodb" 
 cat unitsToAdd.js | mongo > /dev/null
 
-#make back-up copies
-if [ $6 -ne 1 ]; then
-	echo "Backing up tester collection"
-	BACKUP_COLLECTION=$TESTER_COLLECTION
-else
-	echo "Backing up units collection"
-	BACKUP_COLLECTION="units"
-fi
-
-#create backups
-BACKUP_NAME="$BACKUP_COLLECTION"
+#create backups of database
+BACKUP_NAME="$CURRENT_COLLECTION"
 BACKUP_NAME+="Backup"
-echo $BACKUP_COLLECTION
-echo $BACKUP_NAME
-mongoexport --db oilFluidExp --collection $BACKUP_COLLECTION --csv --fieldFile exportFields --out ./$BACKUP_NAME.csv
-mongoexport --db oilFluidExp --collection $BACKUP_COLLECTION --out ./$BACKUP_NAME.json
+
+mongoexport --db oilFluidExp --collection $CURRENT_COLLECTION --csv --fieldFile $EXPORT_FIELD_FILE --out ./backups/$BACKUP_NAME.csv
+mongoexport --db oilFluidExp --collection $CURRENT_COLLECTION --out ./backups/$BACKUP_NAME.json
 
 #echo "Removing temp file created earlier"
 #rm $TMPRD

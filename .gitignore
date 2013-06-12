@@ -24,6 +24,7 @@ masterTestRecord.js
 
 testerBackup.*
 unitsBackup.*
+backups/
 
 # java class files
 *.class
