@@ -3,6 +3,10 @@
 rawDataParser/.metadata/
 rawDataParser/.settings/
 
+# Sublime Data
+*.sublime-project
+*.sublime-workspace
+
 # unitsToAdd data will be generated on each call of ./addUnits
 unitsToAdd.js
 
