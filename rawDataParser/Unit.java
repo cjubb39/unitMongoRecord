@@ -5,6 +5,7 @@ public class Unit {
 	private static final int HOT = 280;
 	private static final int COLD = -65;
 	private static final int ROOM_TEMP = 80;
+	private static final int NUM_TEMPS = 3;
 	private static final int PRESSURE_STEP = 5;
 
 	private int SN;
@@ -12,8 +13,9 @@ public class Unit {
 	private double[][] readings;
 	private double[] inputR;
 	// private double[] outputR; //capacity to use outputR in future
-	private double FS;
+	private double[] FS;
 	private double chTCR, crTCR, rhTCR;
+	private double chTCGF, crTCGF, rhTCGF;
 	private double chNull, crNull, rhNull;
 	private double lin, hyst, nullSet, nfsoSet;
 	private double FSmultiplier, resistanceMultiplier;
@@ -32,7 +34,8 @@ public class Unit {
 	 *            the input resistance at the jth temperature; resistance[1][j]
 	 *            corresponds to the output resistance at the jth temperature
 	 */
-	public Unit(int SN, String fullSN, double[][] readings, double[][] resistance) {
+	public Unit(int SN, String fullSN, double[][] readings,
+			double[][] resistance) {
 		this.SN = SN;
 		this.fullSN = fullSN;
 		this.readings = readings;
@@ -48,16 +51,35 @@ public class Unit {
 	 * Null Set, and NFSO Set as well as some helpful multipliers.
 	 */
 	private void initialize() {
-		double max, min;
-		min = this.readings[0][0];
-		max = this.readings[0][(int) Math.floor((this.readings[0].length) / 2)];
-		this.FS = max - min;
-		this.FSmultiplier = 100 / this.FS;
+		this.calcFS();
+
+		this.FSmultiplier = 100 / this.FS[0];
 		this.resistanceMultiplier = 100 / this.inputR[0];
 
 		this.calcTCRS();
+		this.calcTCGFS();
 		this.calcNullShift();
 		this.calcMisc();
+	}
+
+	/**
+	 * Calculates FSO at each temperature.
+	 */
+	private void calcFS() {
+		this.FS = new double[NUM_TEMPS];
+
+		// initial RT reading formatting differently than subsequent readings
+		double max, min;
+		min = this.readings[0][0];
+		max = this.readings[0][(int) Math.floor((this.readings[0].length) / 2)];
+		this.FS[0] = max - min;
+
+		// subsequent readings
+		for (int i = 1; i < NUM_TEMPS; i++) {
+			min = this.readings[i][0];
+			max = this.readings[i][1];
+			this.FS[i] = max - min;
+		}
 	}
 
 	/**
@@ -74,6 +96,21 @@ public class Unit {
 				* (this.inputR[0] - this.inputR[1]) / (ROOM_TEMP - COLD) * 100;
 		this.rhTCR = this.resistanceMultiplier
 				* (this.inputR[2] - this.inputR[0]) / (HOT - ROOM_TEMP) * 100;
+	}
+
+	/**
+	 * The Cold-Hot, Cold-Room, Room-Hot TCGFs are calculated. (FSO[warmer temp]
+	 * - FSO[colder temp]) / (warmerTemp - colderTemp) * (100 / RT-FSO) * 100
+	 * 
+	 * UNITS: (%/100F)
+	 */
+	private void calcTCGFS() {
+		this.chTCGF = this.FSmultiplier * (this.FS[2] - this.FS[1])
+				/ (HOT - COLD) * 100;
+		this.crTCGF = this.FSmultiplier * (this.FS[0] - this.FS[1])
+				/ (ROOM_TEMP - COLD) * 100;
+		this.rhTCGF = this.FSmultiplier * (this.FS[2] - this.FS[0])
+				/ (HOT - ROOM_TEMP) * 100;
 	}
 
 	/**
@@ -223,6 +260,33 @@ public class Unit {
 	 */
 	public double getRhTCR() {
 		return this.rhTCR;
+	}
+
+	/**
+	 * Getter for Cold-Hot TCGF
+	 * 
+	 * @return Cold-Hot TCGF of unit
+	 */
+	public double getChTCGF() {
+		return this.chTCGF;
+	}
+
+	/**
+	 * Getter for Cold-Room TCGF
+	 * 
+	 * @return Cold-Room TCGF of unit
+	 */
+	public double getCrTCGF() {
+		return this.crTCGF;
+	}
+
+	/**
+	 * Getter for Room-Hot TCGF
+	 * 
+	 * @return Room-Hot TCGF of unit
+	 */
+	public double getRhTCGF() {
+		return this.rhTCGF;
 	}
 
 	/**

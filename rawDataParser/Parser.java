@@ -74,7 +74,7 @@ public class Parser {
 					indicator = true;
 				}
 			} // input.next() called now should return resistance values
-		
+
 			outputReadings = new double[4][11];
 			resistances = new double[2][4];
 
@@ -103,8 +103,8 @@ public class Parser {
 				int j = 0;
 
 				while (reading < 500) { // continue up until resistance
-											// measurements (which should be
-											// >5000)
+										// measurements (which should be
+										// >500)
 					outputReadings[i][j] = reading;
 					reading = Double.parseDouble(input.next().trim());
 					j++;
@@ -165,9 +165,14 @@ public class Parser {
 			// info for each unit
 			System.out.println(u.getSN());
 			System.out.println(u.getFullSN());
+
 			System.out.println(u.getChTCR());
 			System.out.println(u.getCrTCR());
 			System.out.println(u.getRhTCR());
+
+			System.out.println(u.getChTCGF());
+			System.out.println(u.getCrTCGF());
+			System.out.println(u.getRhTCGF());
 
 			System.out.println(u.getChNull());
 			System.out.println(u.getCrNull());

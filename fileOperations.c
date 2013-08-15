@@ -29,6 +29,7 @@ int closeFile(FILE *file){
 
 int enterUnit(FILE *file, const char *fluid, const char *group){
 	float chTCR, crTCR, rhTCR;
+	float chTCGF, crTCGF, rhTCGF;
 	float chNull, crNull, rhNull;
 	float lin, hyst, nullSet, nfsoSet;
 	int SN;
@@ -49,6 +50,16 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 
 	printf("Enter Room-Hot TCR: ");
 	scanf("%f", &rhTCR);
+
+	// TCGF
+	printf("Enter Cold-Hot TCGF: ");
+	scanf("%f", &chTCGF);
+
+	printf("Enter Cold-Room TCGF: ");
+	scanf("%f", &crTCGF);
+
+	printf("Enter Room-Hot TCGF: ");
+	scanf("%f", &rhTCGF);
 
 
 	// Null Shifts
@@ -84,7 +95,13 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	}
 
 	// begin mongodb command to add unit to database
-	fprintf(file, "db.units.update({SN: %d, Group: \"%s\"}, {$set: {SN: %d, fullSN: \"%s\", Fluid: \"%s\", Group: \"%s\", chTCR: %2.3f, crTCR: %2.3f, rhTCR: %2.3f, chNull: %2.3f, crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, nfsoSet: %2.3f}}, true)\n", SN, group, SN, fullSN, fluid, group, chTCR, crTCR, rhTCR, chNull, crNull, rhNull, lin, hyst, nullSet, nfsoSet);
+	fprintf(file, "db.units.update({SN: %d, Group: \"%s\"}, {$set: {SN: %d, " \
+		"fullSN: \"%s\", Fluid: \"%s\", Group: \"%s\", chTCR: %2.3f, crTCR: %2.3f,"\
+		" rhTCR: %2.3f, chTCGF: %2.3f, crTGF: %2.3f, rhTGF: %2.3f, chNull: %2.3f, "\
+		"crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, "\
+		"nfsoSet: %2.3f}}, true)\n", SN, group, SN, fullSN, fluid, group, chTCR, \
+		crTCR, rhTCR, chTCGF, crTCGF, chTCGF, chNull, crNull, rhNull, lin, hyst, \
+		nullSet, nfsoSet);
 	fflush(file);
 
 	return 0;

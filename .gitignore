@@ -31,4 +31,7 @@ unitsBackup.*
 backups/
 
 # java class files
-*.class
+*/*.class
+
+#compiled binaries
+enterUnits
