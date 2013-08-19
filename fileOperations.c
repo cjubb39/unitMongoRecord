@@ -97,8 +97,8 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 	// begin mongodb command to add unit to database
 	fprintf(file, "db.units.update({SN: %d, Group: \"%s\"}, {$set: {SN: %d, " \
 		"fullSN: \"%s\", Fluid: \"%s\", Group: \"%s\", chTCR: %2.3f, crTCR: %2.3f,"\
-		" rhTCR: %2.3f, chTCGF: %2.3f, crTGF: %2.3f, rhTGF: %2.3f, chNull: %2.3f, "\
-		"crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, "\
+		" rhTCR: %2.3f, chTCGF: %2.3f, crTCGF: %2.3f, rhTCGF: %2.3f, chNull: %2.3f"\
+		", crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, "\
 		"nfsoSet: %2.3f}}, true)\n", SN, group, SN, fullSN, fluid, group, chTCR, \
 		crTCR, rhTCR, chTCGF, crTCGF, chTCGF, chNull, crNull, rhNull, lin, hyst, \
 		nullSet, nfsoSet);
