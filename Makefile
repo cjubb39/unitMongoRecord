@@ -15,16 +15,20 @@ LDFLAGS = -g
 LDLIBS = -lm
 
 #define main and dependencies
+complete: enterUnits endLineScrub
+
 enterUnits: enterUnits.o fileOperations.o
 
 enterUnits.o: enterUnits.c fileOperations.c fileOperations.h
 
 fileOperations.o: fileOperations.c fileOperations.h
 
+endLineScrub: endLineScrub.c
+
 #clean targer
 .PHONY: clean
 clean:
-	rm -f *.o
+	rm -f *.o enterUnits endLineScrub
 
 .PHONY: all
-all: clean enterUnits clean
+all: clean complete clean

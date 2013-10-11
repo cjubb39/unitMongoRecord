@@ -22,18 +22,16 @@ else
 	CURRENT_COLLECTION=$PRODUCTION_COLLECTION
 fi
 
-# #makes sure line breaks are appropriate
-# echo "Ensuring file has correct line endings by creating temp file and converting"
-# TMPRD=$HOME/$1-unix
-# cp $1 $TMPRD
+#makes sure line breaks are appropriate
+echo "Ensuring file has correct line endings by creating temp file and converting"
 
-# #covnert to correct line endings
-# sed -i 's/\r\n/\n/g' $TMPRD
-# sed -i 's/\r/\n/g' $TMPRD
+TMPRD=$1-unix
+touch $TMPRD
+./endLineScrub $1 $TMPRD
 
 # Read in and parse raw data files.  Convert to mongodb commands
 echo "Parsing raw data file and creating instructions for mongo shell"
-java -cp $JAVA_CLASSPATH RDParserTester $1 $2 $3 | ./enterUnits $4 $5 > /dev/null
+java -cp $JAVA_CLASSPATH RDParserTester $TMPRD $2 $3 | ./enterUnits $4 $5 > /dev/null
 
 # Change mongodb collection (if necessary) and add mongo commands to backups
 echo "Units will be added to $CURRENT_COLLECTION collection"
@@ -57,5 +55,5 @@ BACKUP_NAME+="Backup"
 mongoexport --db oilFluidExp --collection $CURRENT_COLLECTION --csv --fieldFile $EXPORT_FIELD_FILE --out ./backups/$BACKUP_NAME.csv
 mongoexport --db oilFluidExp --collection $CURRENT_COLLECTION --out ./backups/$BACKUP_NAME.json
 
-#echo "Removing temp file created earlier"
-#rm $TMPRD
+echo "Removing temp file created earlier"
+rm $TMPRD
