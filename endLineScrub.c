@@ -22,7 +22,8 @@ int main(int argc, char **argv)
 				if (*(buf + i + 1) == '\n'){
 					int j = 0;
 					while(*(buf + i + j) != '\0'){
-						*(buf + i + j) = *(buf + i + (++j));
+						*(buf + i + j) = *(buf + i + j + 1);
+						j++;
 					}
 
 				// if just \r, change to \n
