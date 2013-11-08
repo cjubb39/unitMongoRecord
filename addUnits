@@ -1,5 +1,4 @@
 #!/bin/bash
-#STILL NEED TO ADD AUTOMATIC LINE ENDING CONVERSION
 
 #check correct number of arguments
 if [ $# -ne 6 ]; then
