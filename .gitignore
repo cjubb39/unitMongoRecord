@@ -36,3 +36,7 @@ backups/
 #compiled binaries
 enterUnits
 endLineScrub
+
+#Include only MATLAB scripts from csvReports folder
+csvReports/*
+!csvReports/*.m
