@@ -6,6 +6,9 @@ if [ $# -ne 6 ]; then
 	exit
 fi
 
+#Confirm what adding
+echo "addUnits for $4: $5"
+
 #set variables
 TESTER_COLLECTION=tester
 PRODUCTION_COLLECTION=units

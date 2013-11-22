@@ -100,7 +100,7 @@ int enterUnit(FILE *file, const char *fluid, const char *group){
 		" rhTCR: %2.3f, chTCGF: %2.3f, crTCGF: %2.3f, rhTCGF: %2.3f, chNull: %2.3f"\
 		", crNull: %2.3f, rhNull: %2.3f, lin: %2.3f, hyst: %2.3f, nullSet: %2.3f, "\
 		"nfsoSet: %2.3f}}, true)\n", SN, group, SN, fullSN, fluid, group, chTCR, \
-		crTCR, rhTCR, chTCGF, crTCGF, chTCGF, chNull, crNull, rhNull, lin, hyst, \
+		crTCR, rhTCR, chTCGF, crTCGF, rhTCGF, chNull, crNull, rhNull, lin, hyst, \
 		nullSet, nfsoSet);
 	fflush(file);
 
